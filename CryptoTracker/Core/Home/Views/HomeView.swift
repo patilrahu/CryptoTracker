@@ -16,6 +16,8 @@ struct HomeView: View {
             
             VStack {
                 HomeHeader
+                HomeStatsView(showPortFolio: $showPortfolio)
+                SearchBarView(searchText: $vm.searchText)
                 holdingView
                 if !showPortfolio {
                     allCoinBody

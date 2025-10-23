@@ -19,6 +19,9 @@ extension PreviewProvider {
 class DeveloperPreview {
     static let instance = DeveloperPreview()
     let homeVM = HomeViewModel()
+    let stat1VM = StaticsticsModel(title: "Market Cap", value: "$14.03Bn", percentage: 25)
+    let stat2VM = StaticsticsModel(title: "Total Volume", value: "$12.09Tr")
+    let stat3VM = StaticsticsModel(title: "Portfolio Value", value: "$50.4k",percentage: -12.34)
     private init() {
         
     }
@@ -52,3 +55,6 @@ class DeveloperPreview {
     )
 
 }
+
+
+
