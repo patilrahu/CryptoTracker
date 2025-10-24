@@ -31,4 +31,22 @@ extension Double {
     func asPercentageString() -> String {
         return asNumberString() + "%"
     }
+    
+    func formatNumber() -> String {
+        let num = abs(Double(self))
+        let sign = num < 0 ? "-" : ""
+        switch num {
+        case 1_000_000_000_000...:
+            return "\(sign)\(String(format: "%.1f", num / 1_000_000_000_000))Tr"
+        case 1_000_000_000...:
+            return "\(sign)\(String(format: "%.1f", num / 1_000_000_000))Bn"
+        case 1_000_000...:
+            return "\(sign)\(String(format: "%.1f", num / 1_000_000))M"
+        case 1_000...:
+            return "\(sign)\(String(format: "%.1f", num / 1_000))K"
+        default:
+            return "\(sign)\(Int(num))"
+        }
+    }
+
 }

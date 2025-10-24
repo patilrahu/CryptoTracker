@@ -15,7 +15,8 @@ class HomeViewModel: ObservableObject {
     @Published var allCoins:[CoinModel] = []
     @Published var portFolioCoins:[CoinModel] = []
     @Published var searchText: String = ""
-    private let dataService = CoinDataService()
+    private let coinDataService = CoinDataService()
+    private let marketDataService = MarketDataService()
     private var cancellable = Set<AnyCancellable>()
     init() {
 //        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
@@ -29,7 +30,7 @@ class HomeViewModel: ObservableObject {
 //        dataService.$allCoins.sink { [weak self] (coins) in
 //            self?.allCoins = coins
 //        }.store(in: &cancellable)
-        $searchText.combineLatest(dataService.$allCoins)
+        $searchText.combineLatest(coinDataService.$allCoins)
             .map { (text,startingCoins) -> [CoinModel] in
                 guard !text.isEmpty else {
                     return startingCoins
@@ -44,6 +45,25 @@ class HomeViewModel: ObservableObject {
             .sink { [weak self] (returnedCoins) in
                 self?.allCoins = returnedCoins
             }.store(in: &cancellable)
+        marketDataService.$marketData.map { (marketDataModel) -> [StaticsticsModel] in
+            var stats: [StaticsticsModel] = []
+            guard let data = marketDataModel else {
+                return stats
+            }
+            let marketCap = StaticsticsModel(title: "Market Cap", value: data.marketCap, percentage: data.marketCapChangePercentage24HUsd)
+            let volume = StaticsticsModel(title: "24h Volume", value: data.volume)
+            let btcDominance = StaticsticsModel(title: "BTC Dominance", value: data.btcDominance)
+            let portFolioValue = StaticsticsModel(title: "Portfolio Value", value: "$0.00",percentage: 0)
+            stats.append(contentsOf: [
+                marketCap,
+                volume,
+                btcDominance,
+                portFolioValue
+            ])
+            return stats
+        }.sink { [weak self] (returnedStats) in
+            self?.statistics = returnedStats
+        }.store(in: &cancellable)
     }
     
     
