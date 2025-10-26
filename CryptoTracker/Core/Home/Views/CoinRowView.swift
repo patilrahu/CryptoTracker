@@ -19,6 +19,7 @@ struct CoinRowView: View {
             }
             trailingColumn
         }.font(.subheadline)
+            .background(Color.theme.backgroundColor)
     }
 }
 

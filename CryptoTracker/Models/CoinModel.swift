@@ -65,6 +65,7 @@ struct CoinModel: Codable,Identifiable {
     let atlDate: String?
     let lastUpdated: String?
     let currentHoldings: Double?
+    let sparkline_in_7d: SparkLineIn7D?
     
     enum CodingKeys: String, CodingKey {
         case id, symbol, name, image
@@ -82,12 +83,12 @@ struct CoinModel: Codable,Identifiable {
         case atl, atlChangePercentage = "atl_change_percentage"
         case atlDate = "atl_date"
         case lastUpdated = "last_updated"
-        case currentHoldings
+        case currentHoldings,sparkline_in_7d
 
     }
     
     func updateHoldings(amount: Double) -> CoinModel {
-        return CoinModel(id: id, symbol: symbol, name: name, image: image, currentPrice: currentPrice, marketCap: marketCap, marketCapRank: marketCapRank, fullyDilutedValuation: fullyDilutedValuation, totalVolume: totalVolume, high24H: high24H, low24H: low24H, priceChange24H: priceChange24H, priceChangePercentage24H: priceChangePercentage24H, marketCapChange24H: marketCapChange24H, marketCapChangePercentage24H: marketCapChangePercentage24H, circulatingSupply: circulatingSupply, totalSupply: totalSupply, maxSupply: maxSupply, ath: ath, athChangePercentage: athChangePercentage, athDate: athDate, atl: atl, atlChangePercentage: atlChangePercentage, atlDate: atlDate, lastUpdated: lastUpdated, currentHoldings: currentHoldings)
+        return CoinModel(id: id, symbol: symbol, name: name, image: image, currentPrice: currentPrice, marketCap: marketCap, marketCapRank: marketCapRank, fullyDilutedValuation: fullyDilutedValuation, totalVolume: totalVolume, high24H: high24H, low24H: low24H, priceChange24H: priceChange24H, priceChangePercentage24H: priceChangePercentage24H, marketCapChange24H: marketCapChange24H, marketCapChangePercentage24H: marketCapChangePercentage24H, circulatingSupply: circulatingSupply, totalSupply: totalSupply, maxSupply: maxSupply, ath: ath, athChangePercentage: athChangePercentage, athDate: athDate, atl: atl, atlChangePercentage: atlChangePercentage, atlDate: atlDate, lastUpdated: lastUpdated, currentHoldings: amount, sparkline_in_7d: sparkline_in_7d)
     }
     
     var currentHoldingsValue: Double {
@@ -97,5 +98,9 @@ struct CoinModel: Codable,Identifiable {
     var rank: Int {
         return Int(marketCapRank ?? 0)
     }
+}
+
+struct SparkLineIn7D: Codable {
+    let price:[Double]?
 }
 

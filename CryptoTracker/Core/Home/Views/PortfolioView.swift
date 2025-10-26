@@ -56,7 +56,8 @@ struct PortfolioView: View {
                         }
                         ToolbarItem(placement: .navigationBarTrailing) {
                             Button(action: {
-//                                editPortfolio()
+                                guard let coin = selectedCoin else {return}
+                                vm.updateportfoli(coin: coin, amount: Double(quantityText) ?? 0)
                             }) {
                                 Text("Save")
                             }.font(.headline)
@@ -89,6 +90,11 @@ struct PortfolioView: View {
                 .onTapGesture {
                     withAnimation(.easeInOut) {
                         selectedCoin = coin
+                        if let portfolio = vm.portFolioCoins.first(where: {$0.id == coin.id}) {
+                            quantityText = "\(portfolio.currentHoldings ?? 0)"
+                        } else {
+                            quantityText = ""
+                        }
                     }
                 }
         }
