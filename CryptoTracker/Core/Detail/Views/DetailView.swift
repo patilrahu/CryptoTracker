@@ -9,6 +9,7 @@ import SwiftUI
 
 struct DetailView: View {
     @StateObject var vm: DetailViewModel
+    @State private var showFullText: Bool = false
     private let column:[GridItem] = [
         GridItem(.flexible()),
         GridItem(.flexible()),
@@ -27,6 +28,27 @@ struct DetailView: View {
                         .foregroundColor(Color.theme.accentColor)
                         .frame(maxWidth: .infinity,alignment: .leading)
                     Divider()
+                    ZStack {
+                        if let description = vm.description,!description.isEmpty {
+                            VStack(alignment: .leading) {
+                                Text(description)
+                                    .lineLimit(showFullText ? nil : 3)
+                                    .font(.callout)
+                                    .foregroundColor(Color.theme.secondaryTextColor)
+                                Button {
+                                    withAnimation(.easeInOut) {
+                                        showFullText.toggle()
+                                    }
+                                    
+                                } label: {
+                                    Text(showFullText ? "Less..." : "Read More...").font(.caption)
+                                        .fontWeight(.bold)
+                                        .padding(.vertical,4)
+                                }.accentColor(Color.blue)
+
+                            }.frame(maxWidth: .infinity,alignment: .leading)
+                        }
+                    }
                     LazyVGrid(columns: column,alignment:.leading, spacing: 30) {
                         ForEach(vm.overViewStaticstics) { overviewStatic in
                             StaticsticsView(stat: overviewStatic)
@@ -41,6 +63,16 @@ struct DetailView: View {
                             StaticsticsView(stat: additionalStatic)
                         }
                     }
+                    VStack(alignment: .leading,spacing: 20) {
+                        if let websiteUrl = vm.websiteUrl, let url = URL(string: websiteUrl) {
+                            Link("Website", destination: url)
+                        }
+                        if let redditUrl = vm.websiteUrl, let url = URL(string: redditUrl) {
+                            Link("Reddit", destination: url)
+                        }
+                    }.accentColor(.blue)
+                        .frame(maxWidth: .infinity,alignment: .leading)
+                        .font(.headline)
                 }.padding()
             }
         }.navigationTitle(coin.name)

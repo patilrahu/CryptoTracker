@@ -11,6 +11,9 @@ import Combine
 class DetailViewModel: ObservableObject {
     @Published var overViewStaticstics: [StaticsticsModel] = []
     @Published var additionlaStaticstics: [StaticsticsModel] = []
+    @Published var description: String? = nil
+    @Published var websiteUrl: String? = nil
+    @Published var redditUrl: String? = nil
     private let coinDetailService: CoinDeatilDataService
     @Published var coin: CoinModel
     private var cancellables =  Set<AnyCancellable>()
@@ -63,6 +66,13 @@ class DetailViewModel: ObservableObject {
             .sink { [weak self] (returendArray) in
                 self?.overViewStaticstics = returendArray.overview
                 self?.additionlaStaticstics = returendArray.additionals
+        }.store(in: &cancellables)
+        
+        
+        coinDetailService.$coinDetails.sink { [weak self] (returnedCoinDetail) in
+            self?.description = returnedCoinDetail?.description?.en?.removeHTMLoccurrences
+            self?.websiteUrl = returnedCoinDetail?.links?.homepage?.first
+            self?.redditUrl = returnedCoinDetail?.links?.subredditURL
         }.store(in: &cancellables)
     }
 }

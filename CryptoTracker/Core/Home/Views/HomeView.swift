@@ -9,7 +9,7 @@ import SwiftUI
 
 struct HomeView: View {
     @EnvironmentObject private var vm: HomeViewModel
-    @State private var showPortfolio: Bool = false
+    @State private var showPortfolio: Bool = true
     @State private var showSheet: Bool = false
     @State private var selectedCoin: CoinModel? = nil
     @State private var navigateToDetail: Bool = false
